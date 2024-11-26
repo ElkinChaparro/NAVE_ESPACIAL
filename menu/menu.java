@@ -1,12 +1,12 @@
 package menu;
 
 import java.util.Scanner;
-
-import ships.ships;
+import flightSimulator.flightSimulator;
+import spaceShips.spaceShips;
 
 public class menu {
     public static void start() {
-        var entrance = new Scanner(System.in);
+        var scmenu = new Scanner(System.in);
         int option;
         do {// Impresion del menu 1
             System.out.print("""
@@ -19,30 +19,31 @@ public class menu {
                     |4. Fin del programa.                                       |
                     |===========================================================|
                     |====   """);
-            option = entrance.nextInt();
+            option = scmenu.nextInt();
             switch (option) {
                 case 1:// importar lista de planetas y funciones
-
                     break;
                 case 2:// importar lista de naves y funciones
-
+                    spaceShips.Ships();;
                     break;
                 case 3:// importar simulador de viaje con funciones
-                    ships.Ships();
+                    flightSimulator.simulator();
                     break;
-                case 4:// Finalizacion del programa
+                case 4:// TODO Finalizacion del programa
                     System.out.println("""
                             |===========================================================|
                             |           Muchas gracias por volar con nosotros           |
+                            |===========================================================|
+                            |
+                            |CREDITOS
                             |===========================================================|""");
                     break;
-                default:
+                default:// Mensaje de error de opcion
                     System.err.println("""
                             |===========================================================|
                             |            Opcion no valida, intentelo de nuevo           |
                             |===========================================================|""");
             }
         } while (option != 4);
-        entrance.close();
     }
 }
