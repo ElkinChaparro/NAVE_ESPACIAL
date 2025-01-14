@@ -14,8 +14,12 @@ public class game {
     public static Integer[] passCap = { 15, 20, 10, 25, 4 };
     public static Integer[] O2Ability = { 300 };
     // Array to create oxygen tanks
-    public static Integer[] OoxygeTanks = {10};
-    public static Integer[] O2Capacity = {60000};
+    public static Integer[] OoxygeTanks = { 10 };
+    public static Integer[] O2Capacity = { 60000 };
+    // Array to create ShipSelected
+    static List<String> ShipSelected = new ArrayList<>();
+    // Array to create PlanetSelected
+    static List<String> PlanetSelected = new ArrayList<>();
 
     public static void start() {
         var scGame = new Scanner(System.in);
@@ -95,7 +99,20 @@ public class game {
                     } while (selectestatus2 == false);
                     break;
                 case 3:// importar simulador de viaje con funciones
-                       // cada pasajero consume 10 o 300 litros de oxigeno por hora
+                       // cada pasajero consume 300 litros de oxigeno por hora
+                       // a medida que avanza la barra de estado en la impresion generar un numero
+                       // aleatorio y si coinciden generar un evento
+                       // Imprimir barra de estado sin ln y si el porcentaje vale lo mismo que el
+                       // numero aleatorio salte evento
+                       // verificador de seleccion
+                    if (PlanetSelected.isEmpty()) {
+                        System.out.println("Seleccione primero un planeta ");
+                    } else if (ShipSelected.isEmpty()) {
+                        System.out.println("Seleccione primero una nave ");
+                    } else {
+                        //codigo simulador
+                        System.out.println("sec" + PlanetSelected);
+                    }
                     break;
                 case 4:// TODO Finalizacion del programa
                     System.out.println("""
@@ -128,12 +145,13 @@ public class game {
                 |2. Esoger otro planeta                                     |
                 |===========================================================|
                 |====-  """);
-        Integer selec1 = scGame.nextInt();
-        if (selec1 == 1) {
+        Integer selec = scGame.nextInt();
+        if (selec == 1) {
             System.out.println("|===========================================================|");
             System.out.println("|-Planeta seleccionado: " + namePlanet[planet - 1]);
+            PlanetSelected.add(namePlanet[planet - 1]);
             selectestatus1 = true;
-        } else if (selec1 == 2) {
+        } else if (selec == 2) {
             selectestatus1 = false;
         }
         return selectestatus1;
@@ -142,7 +160,7 @@ public class game {
     private static boolean selectShip(Scanner scGame, boolean selectestatus2, int ships) {
         System.out.println("|===========================================================|");
         System.out.println("|-Nave: " + nameShip[ships - 1]);
-        System.out.println("|-Velocidad maxima " + maxSpeed[ships - 1]+"k/h");
+        System.out.println("|-Velocidad maxima " + maxSpeed[ships - 1] + "k/h");
         System.out.println("|-Capacidad de pasajeros " + passCap[ships - 1]);
         System.out.println("|-Capacidad de tanques de oxigeno " + O2Ability[0]);
         System.out.print("""
@@ -153,12 +171,13 @@ public class game {
                 |2. Esoger otra nave                                        |
                 |===========================================================|
                 |====-  """);
-        Integer selec1 = scGame.nextInt();
-        if (selec1 == 1) {
+        Integer selec = scGame.nextInt();
+        if (selec == 1) {
             System.out.println("|===========================================================|");
             System.out.println("|-Nave seleccionada: " + nameShip[ships - 1]);
+            ShipSelected.add(nameShip[ships - 1]);
             selectestatus2 = true;
-        } else if (selec1 == 2) {
+        } else if (selec == 2) {
             selectestatus2 = false;
         }
         return selectestatus2;
@@ -197,7 +216,8 @@ public class game {
         System.out.print("""
                 |===========================================================|
                 |-Seleccione un planeta
-                |====-   """);}
+                |====-   """);
+    }
 
     private static void showMenuShips() {
         // menu ships 1
