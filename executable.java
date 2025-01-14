@@ -1,10 +1,10 @@
-import java.util.Scanner;
+import java.util.*;
 
-import menu.menu;
+import game.game;
 
-public class ejecutable {
+public class executable {
     public static void main(String[] args) {
-        var sceject = new Scanner(System.in);
+        var scexect = new Scanner(System.in);
         var playsAgain = false;
         do {
             // Imagen de cohete en caracteres ASCCI
@@ -34,14 +34,15 @@ public class ejecutable {
                     |                              %*+%         %#*++++++++#%   |
                     |                                               %#*+++++*%  |
                     |===========================================================|""");
-            pressEnter(sceject);
+            pressEnter(scexect);
             // Iporte del menu
-            menu.start();
+            game.start();
+            //Pregunta al final del programa
             System.out.println("¿Desea Iniciar de nuevo? Y|N");
-            var option = sceject.nextLine();
+            var option = scexect.nextLine();
             playsAgain = !option.equalsIgnoreCase("n");
         } while (playsAgain);
-        sceject.close();
+        scexect.close();
     }
 
     public static void pressEnter(Scanner enter) {
