@@ -5,6 +5,7 @@ import game.game;
 public class executable {
     public static void main(String[] args) {
         var scexect = new Scanner(System.in);
+        
         // Imagen de cohete en caracteres ASCCI
         System.out.println("""
                 |===========================================================|

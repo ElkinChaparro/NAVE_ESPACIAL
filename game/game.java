@@ -12,14 +12,21 @@ public class game {
     public static String[] nameShip = { "Armory", "Lovely", "Clansy", "Fancy", "VIP" };
     public static Integer[] maxSpeed = { 10000, 20000, 7500, 15000, 30000 };
     public static Integer[] passCap = { 15, 20, 10, 25, 4 };
-    public static Integer[] O2Ability = { 300 };
-    // Array to create oxygen tanks
-    public static Integer[] OoxygeTanks = { 10 };
-    public static Integer[] O2Capacity = { 60000 };
-    // Array to create ShipSelected
-    static List<String> ShipSelected = new ArrayList<>();
+    public static Integer[] O2Ability = { 250 };
+
     // Array to create PlanetSelected
-    static List<String> PlanetSelected = new ArrayList<>();
+    static List<String> PlanetNameSelected = new ArrayList<>();
+    static List<Integer> PlanetDistanceSelected = new ArrayList<>();
+    // Array to create ShipSelected
+    static List<String> ShipNameSelected = new ArrayList<>();
+    static List<Integer> ShipVelocitySelected = new ArrayList<>();
+    static List<Integer> ShipCapacitySelected = new ArrayList<>();
+    static List<Integer> ShipPassangersSelected = new ArrayList<>();
+    // Array to create human charactaristics
+    public static Integer[] humanRequiredOxygen = { 300 };
+    // Array to create oxygen tanks
+    static List<Integer> OoxygeTanks = new ArrayList<>();
+    public static Integer[] O2Capacity = { 6000 };
 
     public static void start() {
         var scGame = new Scanner(System.in);
@@ -98,20 +105,32 @@ public class game {
                         }
                     } while (selectestatus2 == false);
                     break;
-                case 3:// importar simulador de viaje con funciones
-                       // cada pasajero consume 300 litros de oxigeno por hora
-                       // a medida que avanza la barra de estado en la impresion generar un numero
-                       // aleatorio y si coinciden generar un evento
-                       // Imprimir barra de estado sin ln y si el porcentaje vale lo mismo que el
-                       // numero aleatorio salte evento
-                       // verificador de seleccion
-                    if (PlanetSelected.isEmpty()) {
-                        System.out.println("Seleccione primero un planeta ");
-                    } else if (ShipSelected.isEmpty()) {
-                        System.out.println("Seleccione primero una nave ");
+                case 3:// import travel simulator with functions
+                       // Ship and planet selection checker
+                    if (PlanetNameSelected.isEmpty()) {
+                        System.out.println("""
+                                |===========================================================|
+                                |-Seleccione primero un planeta                             |
+                                    """);
+                    } else if (ShipNameSelected.isEmpty()) {
+                        System.out.println("""
+                                |===========================================================|
+                                |-Seleccione primero una nave                               |
+                                    """);
                     } else {
-                        //codigo simulador
-                        System.out.println("sec" + PlanetSelected);
+                        // Ship and planet selected
+                        Selected();
+                        // Estimated flight time
+                        var EstFlightTime = estimatedFlightTime();
+                        // Number of passengers
+                        NumberOfPassangers(scGame);
+                        // Required oxygen
+                        oxygenFormula(EstFlightTime);
+                        // codigo simulador
+                        // a medida que avanza la barra de estado en la impresion generar un numero
+                        // aleatorio y si coinciden generar un evento
+                        // Imprimir barra de estado sin ln y si el porcentaje vale lo mismo que el
+                        // numero aleatorio salte evento
                     }
                     break;
                 case 4:// TODO Finalizacion del programa
@@ -133,7 +152,51 @@ public class game {
         scGame.close();
     }
 
+    // Formulas
+    private static int estimatedFlightTime() {
+        var EstFlightTime = (PlanetDistanceSelected.get(0) / ShipVelocitySelected.get(0));
+        System.out.println("|-El tiempo de vuelo estimado es de : " + EstFlightTime + " Horas");
+        return EstFlightTime;
+    }
+
+    private static void oxygenFormula(int EstFlightTime) {
+        var Formula01 = (((humanRequiredOxygen[0] * ShipPassangersSelected.get(0)) * EstFlightTime) / O2Capacity[0]);
+        System.out.println("|-Las balas de oxigeno nesesarias para el vuelo son: " + Formula01);
+        System.out.println("|-Que equivalente a " + Formula01 * O2Capacity[0] + " Litros de O2 Totales");
+        System.out.println("|- Con un consumo normal por persona de: " + humanRequiredOxygen[0] + "L/H");
+    }
+
+    // selectors
+
+    private static void NumberOfPassangers(Scanner scGame) {
+        var question = true;
+        do {
+            System.out.println("Cantidad de pasajeros a viajar");
+            var numPass = scGame.nextInt();
+            if (numPass > ShipCapacitySelected.get(0)) {
+                System.out.println("Supera la capacidad maxima de pasajeros");
+                question = true;
+            } else {
+                ShipPassangersSelected.add(numPass);
+                question = false;
+            }
+        } while (question == true);
+    }
+
+    private static void Selected() {
+        System.out.println("|===========================================================|");
+        System.out.println("|-Planeta: " + PlanetNameSelected);
+        System.out.println("|-Distancia del planeta " + PlanetDistanceSelected);
+        System.out.println("|===========================================================|");
+        System.out.println("|-Nave: " + ShipNameSelected);
+        System.out.println("|-Velocidad maxima " + ShipVelocitySelected);
+        System.out.println("|-Capacidad de pasajeros " + ShipCapacitySelected);
+        System.out.println("|-Capacidad de tanques de oxigeno " + O2Ability[0]);
+        System.out.println("|===========================================================|");
+    }
+
     private static boolean selectPlanet(Scanner scGame, boolean selectestatus1, int planet) {
+        // impression of the planet's features
         System.out.println("|===========================================================|");
         System.out.println("|-Planeta: " + namePlanet[planet - 1]);
         System.out.println("|-Distancia del planeta " + planetDistance[planet - 1]);
@@ -149,7 +212,12 @@ public class game {
         if (selec == 1) {
             System.out.println("|===========================================================|");
             System.out.println("|-Planeta seleccionado: " + namePlanet[planet - 1]);
-            PlanetSelected.add(namePlanet[planet - 1]);
+            // Adds new features to the array
+            String planetSelected = namePlanet[planet - 1];
+            Integer DistanceSelected = planetDistance[planet - 1];
+            PlanetNameSelected.add(planetSelected);
+            PlanetDistanceSelected.add(DistanceSelected);
+
             selectestatus1 = true;
         } else if (selec == 2) {
             selectestatus1 = false;
@@ -158,9 +226,10 @@ public class game {
     }
 
     private static boolean selectShip(Scanner scGame, boolean selectestatus2, int ships) {
+        // impression of the ship's features
         System.out.println("|===========================================================|");
         System.out.println("|-Nave: " + nameShip[ships - 1]);
-        System.out.println("|-Velocidad maxima " + maxSpeed[ships - 1] + "k/h");
+        System.out.println("|-Velocidad maxima " + maxSpeed[ships - 1] + " k/h");
         System.out.println("|-Capacidad de pasajeros " + passCap[ships - 1]);
         System.out.println("|-Capacidad de tanques de oxigeno " + O2Ability[0]);
         System.out.print("""
@@ -175,7 +244,14 @@ public class game {
         if (selec == 1) {
             System.out.println("|===========================================================|");
             System.out.println("|-Nave seleccionada: " + nameShip[ships - 1]);
-            ShipSelected.add(nameShip[ships - 1]);
+            // Adds new features to the array
+            String NameSelected = nameShip[ships - 1];
+            Integer VelocitySelected = maxSpeed[ships - 1];
+            Integer CapacitySelected = passCap[ships - 1];
+            ShipNameSelected.add(NameSelected);
+            ShipVelocitySelected.add(VelocitySelected);
+            ShipCapacitySelected.add(CapacitySelected);
+
             selectestatus2 = true;
         } else if (selec == 2) {
             selectestatus2 = false;
@@ -183,8 +259,10 @@ public class game {
         return selectestatus2;
     }
 
+    // PrintMenu's
+
     private static void showMenuPlanets() {
-        // menu ships 1
+        // menu planets 1
         System.out.println("""
                 |===========================================================|
                 |                Naves espaciales disponibles               |
@@ -247,7 +325,7 @@ public class game {
     }
 
     private static void showMenu() {
-        // Impresion del menu 1
+        // Print menu 1
         System.out.print("""
                 |===========================================================|
                 |                   Seleccione una opcion                   |
