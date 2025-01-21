@@ -12,7 +12,7 @@ public class game {
     public static String[] nameShip = { "Armory", "Lovely", "Clansy", "Fancy", "VIP" };
     public static Integer[] maxSpeed = { 10000, 20000, 7500, 15000, 30000 };
     public static Integer[] passCap = { 15, 20, 10, 25, 4 };
-    public static Integer[] O2Ability = { 250 };
+    public static Integer[] O2Ability = { 400 };
 
     // Array to create PlanetSelected
     static List<String> PlanetNameSelected = new ArrayList<>();
@@ -26,9 +26,10 @@ public class game {
     public static Integer[] humanRequiredOxygen = { 300 };
     // Array to create oxygen tanks
     static List<Integer> OoxygeTanks = new ArrayList<>();
+    static List<Integer> OoxygenSelected = new ArrayList<>();
     public static Integer[] O2Capacity = { 6000 };
 
-    public static void start() {
+    public static void start() throws InterruptedException {
         var scGame = new Scanner(System.in);
         int option;
 
@@ -126,13 +127,26 @@ public class game {
                         NumberOfPassangers(scGame);
                         // Required oxygen
                         oxygenFormula(EstFlightTime);
-                        // codigo simulador
-                        // a medida que avanza la barra de estado en la impresion generar un numero
-                        // aleatorio y si coinciden generar un evento
-                        // Imprimir barra de estado sin ln y si el porcentaje vale lo mismo que el
-                        // numero aleatorio salte evento
+                        // Simulator code
+                        int total = 100;
+                        for (int i = 0; i <= total; i++) {
+                            // Call the method to display the progress bar
+                            printLoadingBar(i, total, scGame);
+                            // Events
+                            var random = new Random();
+                            if (random.nextInt(10) == 0) { // Approximately 10% chance
+                                ejecutarEventoSecundario(scGame, i, i, i);
+                            }
+                            // Simulates a process with a small delay
+                            Thread.sleep(300);
+
+                            // a medida que avanza la barra de estado en la impresion generar un numero
+                            // aleatorio y si coinciden generar un evento
+                            // Imprimir barra de estado sin ln y si el porcentaje vale lo mismo que el
+                            // numero aleatorio salte evento
+                        }
+                        break;
                     }
-                    break;
                 case 4:// TODO Finalizacion del programa
                     System.out.println("""
                             |===========================================================|
@@ -150,9 +164,71 @@ public class game {
             }
         } while (option != 4);
         scGame.close();
+
+    }
+
+    // Eventos aleatorios
+    public static void ejecutarEventoSecundario(Scanner scGame, int Formula02, int VelocitySelected, int numPass) {
+        Random random = new Random();
+        int secretnumber = random.nextInt(2) + 1;
+        switch (secretnumber) {
+            case 1:
+                System.out.println("""
+                        Tu Compañero esta muy mal herido, ¿deseas salvarlo?
+                        1. Si               -4000 (O2)
+                        2. No               +1500 (O2)
+                        """);
+                var answer = scGame.nextInt();
+                if (answer == 1) {
+                    int Formula03 = +4000;
+                    OoxygenSelected.remove(Formula03);
+
+                    System.out.println("Oxigeno restante: " + OoxygenSelected.get(0));
+                } else {
+                    numPass -= 1;
+                    Formula02 = Formula02 + 1500;
+                    System.out.println("Oxigeno restante: " + Formula02);
+                }
+                break;
+            case 2:
+                System.out.println("Falla en el motor, pierdes velocidad irremediablemente");
+                VelocitySelected = VelocitySelected - 5000;
+                System.out.println("Velocidad Actual: " + VelocitySelected);
+                break;
+        }
+    }
+
+    // Loading bar
+    public static void printLoadingBar(int progress, int total, Scanner scGame) {
+        int widthBar = 50; // Width of bar in characters
+        int complete = (progress * widthBar) / total; // Proportion completed
+        int restante = widthBar - complete; // Part not completed
+
+        // Loading Bar Builder
+        StringBuilder bar = new StringBuilder();
+        bar.append("[");
+        for (int i = 0; i < complete; i++) {
+            bar.append("=");
+        }
+        for (int i = 0; i < restante; i++) {
+            bar.append(" ");
+        }
+        bar.append("]");
+
+        // Calculate the percentage
+        int percentage = (progress * 100) / total;
+
+        // Print the bar with the percentage
+        System.out.println("\r" + bar + " " + percentage + "%");
+
+        // End the line if progress reaches 100%
+        if (progress == total) {
+            System.out.println("Viaje Terminado Experiencia completada");
+        }
     }
 
     // Formulas
+
     private static int estimatedFlightTime() {
         var EstFlightTime = (PlanetDistanceSelected.get(0) / ShipVelocitySelected.get(0));
         System.out.println("|-El tiempo de vuelo estimado es de : " + EstFlightTime + " Horas");
@@ -161,9 +237,11 @@ public class game {
 
     private static void oxygenFormula(int EstFlightTime) {
         var Formula01 = (((humanRequiredOxygen[0] * ShipPassangersSelected.get(0)) * EstFlightTime) / O2Capacity[0]);
+        var Formula02 = Formula01 * O2Capacity[0];
         System.out.println("|-Las balas de oxigeno nesesarias para el vuelo son: " + Formula01);
-        System.out.println("|-Que equivalente a " + Formula01 * O2Capacity[0] + " Litros de O2 Totales");
-        System.out.println("|- Con un consumo normal por persona de: " + humanRequiredOxygen[0] + "L/H");
+        System.out.println("|-Que equivalente a " + Formula02 + " Litros de O2 Totales");
+        System.out.println("|-Con un consumo normal por persona de: " + humanRequiredOxygen[0] + "L/H");
+        OoxygenSelected.add(Formula02);
     }
 
     // selectors
