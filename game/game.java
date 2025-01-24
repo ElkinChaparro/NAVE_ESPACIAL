@@ -12,6 +12,7 @@ public class game {
     public static String[] nameShip = { "Armory", "Lovely", "Clansy", "Fancy", "VIP" };
     public static Integer[] maxSpeed = { 10000, 20000, 7500, 15000, 30000 };
     public static Integer[] passCap = { 15, 20, 10, 25, 4 };
+    public static Integer[] Kerosene = { 80, 120, 70, 90, 200 };
     public static Integer[] O2Ability = { 400 };
 
     // Array to create PlanetSelected
@@ -22,11 +23,12 @@ public class game {
     static List<Integer> ShipVelocitySelected = new ArrayList<>();
     static List<Integer> ShipCapacitySelected = new ArrayList<>();
     static List<Integer> ShipPassangersSelected = new ArrayList<>();
+    static List<Integer> ShipKeroseneSelected = new ArrayList<>();
     // Array to create human charactaristics
     public static Integer[] humanRequiredOxygen = { 300 };
     // Array to create oxygen tanks
-    static List<Integer> OoxygeTanks = new ArrayList<>();
-    static List<Integer> OoxygenSelected = new ArrayList<>();
+    static List<Integer> OxygenTanks = new ArrayList<>();
+    static List<Integer> OxygenSelected = new ArrayList<>();
     public static Integer[] O2Capacity = { 6000 };
 
     public static void start() throws InterruptedException {
@@ -109,14 +111,17 @@ public class game {
                 case 3:// import travel simulator with functions
                        // Ship and planet selection checker
                     if (PlanetNameSelected.isEmpty()) {
-                        System.out.println("""
-                                |===========================================================|
-                                |-Seleccione primero un planeta                             |
-                                    """);
+                        System.out.println(
+                                """
+                                        |===========================================================|
+                                        |-Seleccione primero un planeta                             |
+                                        |===========================================================|                            |
+                                            """);
                     } else if (ShipNameSelected.isEmpty()) {
                         System.out.println("""
                                 |===========================================================|
                                 |-Seleccione primero una nave                               |
+                                |===========================================================|
                                     """);
                     } else {
                         // Ship and planet selected
@@ -127,6 +132,7 @@ public class game {
                         NumberOfPassangers(scGame);
                         // Required oxygen
                         oxygenFormula(EstFlightTime);
+                        pressEnter(scGame);
                         // Simulator code
                         int total = 100;
                         for (int i = 0; i <= total; i++) {
@@ -135,28 +141,26 @@ public class game {
                             // Events
                             var random = new Random();
                             if (random.nextInt(10) == 0) { // Approximately 10% chance
-                                ejecutarEventoSecundario(scGame, i, i, i);
+                                ejecutarEventoSecundario(scGame);
                             }
                             // Simulates a process with a small delay
                             Thread.sleep(300);
-
-                            // a medida que avanza la barra de estado en la impresion generar un numero
-                            // aleatorio y si coinciden generar un evento
-                            // Imprimir barra de estado sin ln y si el porcentaje vale lo mismo que el
-                            // numero aleatorio salte evento
                         }
                         break;
                     }
-                case 4:// TODO Finalizacion del programa
+                    break;
+                case 4:// credits
                     System.out.println("""
                             |===========================================================|
                             |           Muchas gracias por volar con nosotros           |
                             |===========================================================|
-                            |
-                            |CREDITOS
+                            |                                                           |
+                            |-----------------------Produced by: -----------------------|
+                            |--------Ingeniero Elkin Humberto Chaparro Franklin---------|
+                            |                                                           |
                             |===========================================================|""");
                     break;
-                default:// Mensaje de error de opcion
+                default:// Option error message
                     System.err.println("""
                             |===========================================================|
                             |            Opcion no valida, intentelo de nuevo           |
@@ -167,33 +171,75 @@ public class game {
 
     }
 
-    // Eventos aleatorios
-    public static void ejecutarEventoSecundario(Scanner scGame, int Formula02, int VelocitySelected, int numPass) {
+    // Random events
+    public static void ejecutarEventoSecundario(Scanner scGame) {
         Random random = new Random();
         int secretnumber = random.nextInt(2) + 1;
         switch (secretnumber) {
             case 1:
-                System.out.println("""
-                        Tu Compañero esta muy mal herido, ¿deseas salvarlo?
-                        1. Si               -4000 (O2)
-                        2. No               +1500 (O2)
-                        """);
+                System.out.println("|===========================================================|");
+                System.out.print("""
+                        |-Tu Compañero esta muy mal herido, ¿deseas salvarlo?
+                        |1. Si               -400000 (O2)
+                        |2. No               +15000 (O2)
+                        |===========================================================|
+                        |====-""");
                 var answer = scGame.nextInt();
+                Integer operator01 = OxygenSelected.get(0);
+                Integer operator02 = ShipPassangersSelected.get(0);
                 if (answer == 1) {
-                    int Formula03 = +4000;
-                    OoxygenSelected.remove(Formula03);
-
-                    System.out.println("Oxigeno restante: " + OoxygenSelected.get(0));
+                    int result = operator01 - 400000;
+                    OxygenSelected.clear();
+                    OxygenSelected.add(result);
+                    System.out.println("|===========================================================|");
+                    System.out.println("|-Oxigeno restante: " + OxygenSelected.get(0));
+                    System.out.println("|===========================================================|");
+                    operator01 = OxygenSelected.get(0);
+                    if (operator02 == 0) {
+                        System.out.println("|===========================================================|");
+                        System.out.println("|-El juego ha terminado!!!! PERDISTE!!!                     |");
+                        System.out.println("|===========================================================|");
+                        System.out.println("|===========================================================|");
+                        System.out.println("|-Personas restantes: " + ShipPassangersSelected.get(0));
+                        System.out.println("|===========================================================|");
+                    }
                 } else {
-                    numPass -= 1;
-                    Formula02 = Formula02 + 1500;
-                    System.out.println("Oxigeno restante: " + Formula02);
+                    int result = operator01 + 15000;
+                    int result01 = operator02 - 1;
+                    OxygenSelected.clear();
+                    OxygenSelected.add(result);
+                    ShipPassangersSelected.clear();
+                    ShipPassangersSelected.add(result01);
+                    System.out.println("|===========================================================|");
+                    System.out.println("|-Oxigeno restante: " + OxygenSelected.get(0));
+                    System.out.println("|===========================================================|");
+                    System.out.println("|-Personas restantes: " + ShipPassangersSelected.get(0));
+                    System.out.println("|===========================================================|");
+                    operator02 = ShipPassangersSelected.get(0);
+                    if (operator02 == 0) {
+                        System.out.println("|===========================================================|");
+                        System.out.println("|-El juego ha terminado!!!! PERDISTE!!!                     |");
+                        System.out.println("|===========================================================|");
+                    }
                 }
                 break;
             case 2:
-                System.out.println("Falla en el motor, pierdes velocidad irremediablemente");
-                VelocitySelected = VelocitySelected - 5000;
-                System.out.println("Velocidad Actual: " + VelocitySelected);
+                System.out.println("|===========================================================|");
+                System.out.println("|-Falla en el motor, pierdes queroseno irremediablemente    |");
+                System.out.println("|===========================================================|");
+                Integer operator03 = ShipKeroseneSelected.get(0);
+                int result = operator03 - 15;
+                ShipKeroseneSelected.clear();
+                ShipKeroseneSelected.add(result);
+                System.out.println("|===========================================================|");
+                System.out.println("|-Queroseno Actual: " + ShipKeroseneSelected.get(0));
+                System.out.println("|===========================================================|");
+                operator03 = ShipKeroseneSelected.get(0);
+                if (operator03 == 0) {
+                    System.out.println("|===========================================================|");
+                    System.out.println("|-El juego ha terminado!!!! PERDISTE!!!                     |");
+                    System.out.println("|===========================================================|");
+                }
                 break;
         }
     }
@@ -223,7 +269,9 @@ public class game {
 
         // End the line if progress reaches 100%
         if (progress == total) {
-            System.out.println("Viaje Terminado Experiencia completada");
+            System.out.println("|===========================================================|");
+            System.out.println("|-----------Viaje Terminado Experiencia completada----------|");
+            System.out.println("|===========================================================|");
         }
     }
 
@@ -231,17 +279,20 @@ public class game {
 
     private static int estimatedFlightTime() {
         var EstFlightTime = (PlanetDistanceSelected.get(0) / ShipVelocitySelected.get(0));
+        System.out.println("|===========================================================|");
         System.out.println("|-El tiempo de vuelo estimado es de : " + EstFlightTime + " Horas");
+        System.out.println("|-Tienes actualmente " + ShipKeroseneSelected.get(0) + " Galones de Queroseno");
         return EstFlightTime;
     }
 
     private static void oxygenFormula(int EstFlightTime) {
         var Formula01 = (((humanRequiredOxygen[0] * ShipPassangersSelected.get(0)) * EstFlightTime) / O2Capacity[0]);
         var Formula02 = Formula01 * O2Capacity[0];
+        System.out.println("|===========================================================|");
         System.out.println("|-Las balas de oxigeno nesesarias para el vuelo son: " + Formula01);
         System.out.println("|-Que equivalente a " + Formula02 + " Litros de O2 Totales");
         System.out.println("|-Con un consumo normal por persona de: " + humanRequiredOxygen[0] + "L/H");
-        OoxygenSelected.add(Formula02);
+        OxygenSelected.add(Formula02);
     }
 
     // selectors
@@ -249,10 +300,16 @@ public class game {
     private static void NumberOfPassangers(Scanner scGame) {
         var question = true;
         do {
-            System.out.println("Cantidad de pasajeros a viajar");
+            System.out.println("|===========================================================|");
+            System.out.println("|-Cantidad de pasajeros a viajar                            |");
+            System.out.println("|===========================================================|");
+            System.out.print("|====-");
             var numPass = scGame.nextInt();
             if (numPass > ShipCapacitySelected.get(0)) {
-                System.out.println("Supera la capacidad maxima de pasajeros");
+                System.out.println("|===========================================================|");
+                System.out.println("|Supera la capacidad maxima de pasajeros                    |");
+                System.out.println("|===========================================================|");
+
                 question = true;
             } else {
                 ShipPassangersSelected.add(numPass);
@@ -263,14 +320,14 @@ public class game {
 
     private static void Selected() {
         System.out.println("|===========================================================|");
-        System.out.println("|-Planeta: " + PlanetNameSelected);
-        System.out.println("|-Distancia del planeta " + PlanetDistanceSelected);
+        System.out.println("|-Planeta: " + PlanetNameSelected.get(0));
+        System.out.println("|-Distancia del planeta " + PlanetDistanceSelected.get(0));
         System.out.println("|===========================================================|");
-        System.out.println("|-Nave: " + ShipNameSelected);
-        System.out.println("|-Velocidad maxima " + ShipVelocitySelected);
-        System.out.println("|-Capacidad de pasajeros " + ShipCapacitySelected);
+        System.out.println("|-Nave: " + ShipNameSelected.get(0));
+        System.out.println("|-Velocidad maxima " + ShipVelocitySelected.get(0));
+        System.out.println("|-Capacidad de pasajeros " + ShipCapacitySelected.get(0));
+        System.out.println("|-Capacidad de tanques de Queroseno " + ShipKeroseneSelected.get(0));
         System.out.println("|-Capacidad de tanques de oxigeno " + O2Ability[0]);
-        System.out.println("|===========================================================|");
     }
 
     private static boolean selectPlanet(Scanner scGame, boolean selectestatus1, int planet) {
@@ -309,6 +366,7 @@ public class game {
         System.out.println("|-Nave: " + nameShip[ships - 1]);
         System.out.println("|-Velocidad maxima " + maxSpeed[ships - 1] + " k/h");
         System.out.println("|-Capacidad de pasajeros " + passCap[ships - 1]);
+        System.out.println("|-Capacidad de galones de Queroseno " + Kerosene[ships - 1]);
         System.out.println("|-Capacidad de tanques de oxigeno " + O2Ability[0]);
         System.out.print("""
                 |===========================================================|
@@ -326,9 +384,11 @@ public class game {
             String NameSelected = nameShip[ships - 1];
             Integer VelocitySelected = maxSpeed[ships - 1];
             Integer CapacitySelected = passCap[ships - 1];
+            Integer keroseneSelected = Kerosene[ships - 1];
             ShipNameSelected.add(NameSelected);
             ShipVelocitySelected.add(VelocitySelected);
             ShipCapacitySelected.add(CapacitySelected);
+            ShipKeroseneSelected.add(keroseneSelected);
 
             selectestatus2 = true;
         } else if (selec == 2) {
@@ -371,7 +431,8 @@ public class game {
         System.out.println("                                                 |");
         System.out.print("""
                 |===========================================================|
-                |-Seleccione un planeta
+                |-Seleccione un planeta                                     |
+                |===========================================================|
                 |====-   """);
     }
 
@@ -398,7 +459,8 @@ public class game {
         System.out.println("                                                     |");
         System.out.print("""
                 |===========================================================|
-                |-Seleccione una nave
+                |-Seleccione una nave                                       |
+                |===========================================================|
                 |====-   """);
     }
 
@@ -416,4 +478,12 @@ public class game {
                 |====-  """);
     }
 
+    public static void pressEnter(Scanner scGame) {
+        // Bufferosene breaks and cleaning
+        System.out.print("""
+                |===========================================================|
+                |          Presione ENTER para Iniciar el vuelo             |
+                |===========================================================|""");
+        scGame.nextLine();
+    }
 }
