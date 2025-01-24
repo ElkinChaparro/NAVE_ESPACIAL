@@ -111,17 +111,15 @@ public class game {
                 case 3:// import travel simulator with functions
                        // Ship and planet selection checker
                     if (PlanetNameSelected.isEmpty()) {
-                        System.out.println(
+                        System.out.print(
                                 """
                                         |===========================================================|
                                         |-Seleccione primero un planeta                             |
-                                        |===========================================================|                            |
                                             """);
                     } else if (ShipNameSelected.isEmpty()) {
-                        System.out.println("""
+                        System.out.print("""
                                 |===========================================================|
                                 |-Seleccione primero una nave                               |
-                                |===========================================================|
                                     """);
                     } else {
                         // Ship and planet selected
@@ -132,7 +130,6 @@ public class game {
                         NumberOfPassangers(scGame);
                         // Required oxygen
                         oxygenFormula(EstFlightTime);
-                        pressEnter(scGame);
                         // Simulator code
                         int total = 100;
                         for (int i = 0; i <= total; i++) {
@@ -240,6 +237,8 @@ public class game {
                     System.out.println("|-El juego ha terminado!!!! PERDISTE!!!                     |");
                     System.out.println("|===========================================================|");
                 }
+                scGame.nextLine();
+                pressEnter(scGame);
                 break;
         }
     }
@@ -281,11 +280,13 @@ public class game {
         var EstFlightTime = (PlanetDistanceSelected.get(0) / ShipVelocitySelected.get(0));
         System.out.println("|===========================================================|");
         System.out.println("|-El tiempo de vuelo estimado es de : " + EstFlightTime + " Horas");
+        System.out.println("|===========================================================|");
         System.out.println("|-Tienes actualmente " + ShipKeroseneSelected.get(0) + " Galones de Queroseno");
         return EstFlightTime;
     }
 
     private static void oxygenFormula(int EstFlightTime) {
+        var scGame = new Scanner(System.in);
         var Formula01 = (((humanRequiredOxygen[0] * ShipPassangersSelected.get(0)) * EstFlightTime) / O2Capacity[0]);
         var Formula02 = Formula01 * O2Capacity[0];
         System.out.println("|===========================================================|");
@@ -293,6 +294,7 @@ public class game {
         System.out.println("|-Que equivalente a " + Formula02 + " Litros de O2 Totales");
         System.out.println("|-Con un consumo normal por persona de: " + humanRequiredOxygen[0] + "L/H");
         OxygenSelected.add(Formula02);
+        pressEnter(scGame);
     }
 
     // selectors
@@ -308,7 +310,6 @@ public class game {
             if (numPass > ShipCapacitySelected.get(0)) {
                 System.out.println("|===========================================================|");
                 System.out.println("|Supera la capacidad maxima de pasajeros                    |");
-                System.out.println("|===========================================================|");
 
                 question = true;
             } else {
@@ -324,6 +325,7 @@ public class game {
         System.out.println("|-Distancia del planeta " + PlanetDistanceSelected.get(0));
         System.out.println("|===========================================================|");
         System.out.println("|-Nave: " + ShipNameSelected.get(0));
+        System.out.println("|===========================================================|");
         System.out.println("|-Velocidad maxima " + ShipVelocitySelected.get(0));
         System.out.println("|-Capacidad de pasajeros " + ShipCapacitySelected.get(0));
         System.out.println("|-Capacidad de tanques de Queroseno " + ShipKeroseneSelected.get(0));
@@ -480,9 +482,9 @@ public class game {
 
     public static void pressEnter(Scanner scGame) {
         // Bufferosene breaks and cleaning
-        System.out.print("""
+        System.out.println("""
                 |===========================================================|
-                |          Presione ENTER para Iniciar el vuelo             |
+                |       Presione ENTER para continuar con el vuelo          |
                 |===========================================================|""");
         scGame.nextLine();
     }
