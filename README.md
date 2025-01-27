@@ -1,7 +1,7 @@
 
 # Nave Espacial
 
-Programa creado para simular un vuelo espacial basico donde podras sentir un poco la adrenalina de sobrevivir gestionando tus propios recursos y personal abordo, donde tendras que ser muy habil y calculador a la hora de elegir 
+Program created to simulate a basic space flight where you can feel a little of the adrenaline of surviving by managing your own resources and personnel on board, where you will have to be very skillful and calculating when choosing. 
 
 
 ![Logo](https://media.istockphoto.com/id/1452870348/es/vector/icono-de-cohete-en-estilo-plano-despegue-de-la-nave-espacial-en-el-fondo-espacial.jpg?s=612x612&w=0&k=20&c=GZkzWmChG_3ecbSCEu5pnA6tE81DRMwGlN3USPgQTo8=)
