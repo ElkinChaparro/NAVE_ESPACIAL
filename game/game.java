@@ -174,6 +174,7 @@ public class game {
         int secretnumber = random.nextInt(2) + 1;
         switch (secretnumber) {
             case 1:
+            System.out.println("");
                 System.out.println("|===========================================================|");
                 System.out.print("""
                         |-Tu Compañero esta muy mal herido, ¿deseas salvarlo?
@@ -221,6 +222,7 @@ public class game {
                 }
                 break;
             case 2:
+                System.out.println("");
                 System.out.println("|===========================================================|");
                 System.out.println("|-Falla en el motor, pierdes queroseno irremediablemente    |");
                 System.out.println("|===========================================================|");
@@ -264,10 +266,11 @@ public class game {
         int percentage = (progress * 100) / total;
 
         // Print the bar with the percentage
-        System.out.println("\r" + bar + " " + percentage + "%");
+        System.out.print("\r" + bar + " " + percentage + "%");
 
         // End the line if progress reaches 100%
         if (progress == total) {
+            System.out.println("");
             System.out.println("|===========================================================|");
             System.out.println("|-----------Viaje Terminado Experiencia completada----------|");
             System.out.println("|===========================================================|");

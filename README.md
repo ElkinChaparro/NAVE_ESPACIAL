@@ -57,6 +57,7 @@ The simulator calculates and manages crucial resources:
 - [ ] Update to real-time resource monitoring
 - [ ] Update to journey progress visualization
 - [ ] Emergency scenarios handling
+- [ ] update on restrictions, operators and design
 
 ## 📝 License
 This project is part of a development challenge and is available for educational purposes.
